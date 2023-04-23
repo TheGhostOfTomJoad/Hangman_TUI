@@ -36,20 +36,20 @@ class GameLogic(private var wordToGuess: String, tries: Int) {
     private fun makeMessage(guessedRight: Boolean): Triple<String, Boolean, Boolean> {
         var message: String
         if (guessedRight) {
-            message = "You guessed right!"
+            message = "Richtig geraten!"
             if (gameIsWon()) {
-                message = "$message\nYou win!"
-                return Triple(message, true, false)
+                message = "$message\nDu hast gewonnen!"
+                return Triple("$message\n", true, false)
             }
         } else {
-            message = "You guessed wrong!"
+            message = "Falsch gerraten!"
             if (gameIsLost()) {
-                message = "$message\nYou loose!"
-                return Triple(message, false, true)
+                message = "$message\nDu hast verloren!"
+                return Triple("$message\n", false, true)
             }
 
         }
-        return Triple("$message\n${triesLeft} Versuche übrig", false, false)
+        return Triple("$message\n${triesLeft} Versuche übrig\n", false, false)
     }
 
     fun playRound(newInput: Char): Triple<String, Boolean, Boolean> {

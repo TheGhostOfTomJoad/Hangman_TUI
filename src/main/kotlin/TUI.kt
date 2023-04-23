@@ -37,4 +37,18 @@ class TUI {
 
     }
 
+    fun printOnlyGuessedLettersInWord(onlyGuessedLettersInWord: String) {
+        println("Das Wort ist: " + onlyGuessedLettersInWord)
+    }
+
+    fun printWordAfterGameOver(word: String) {
+        println("Das Wort war: " + word)
+    }
+
+    fun printEmptyLines(n:Int){
+        println("\n".repeat(n))
+    }
+
+
+
 }
