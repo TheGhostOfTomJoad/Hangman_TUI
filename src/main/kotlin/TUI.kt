@@ -1,0 +1,40 @@
+class TUI {
+
+
+    private val wordHelpers = WordHelpers()
+
+    fun randomGermanWord(): String {
+        return wordHelpers.randomGermanWord()
+    }
+
+    fun askForLetter(): Char {
+        while (true) {
+            println("Gib einen Buchstaben ein!")
+            val maybeLetter: String = readln()
+            if (wordHelpers.isLetter(maybeLetter)) {
+                return maybeLetter[0]
+            }
+            println(maybeLetter + "ist kein Buchstabe")
+        }
+
+    }
+
+
+    fun askForWord(): String {
+        while (true) {
+            println("Welches Wort soll erraten werden!")
+            val maybeWord: String = readln()
+            /*            if (maybeWord.all { c -> c.isLetter() }  ) {
+                            return maybeWord
+                        }*/
+            if (wordHelpers.isGermanWord(maybeWord)) {
+                return maybeWord
+            }
+            //println("Das Wort darf nur Buchstaben enthalten!")
+            println("Das ist kein deutsches Wort!")
+        }
+
+
+    }
+
+}
