@@ -1,18 +1,32 @@
-import java.io.File
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
-fun main(args: Array<String>) {
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.Serializable
+import java.io.File
+
+suspend fun main(args: Array<String>) {
     println("Hello World!")
 
     // Try adding program arguments via Run/Debug configuration.
     // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
     println("Program arguments: ${args.joinToString()}")
+    //sentNameScoretoServer()
+    //val client = HTTPSenderReceiver()
+    //client.sentNameScoreToServer("Max",3)
+    //client.sentNameScoreToServer("Bob Dylan",1)
+    //print(client.GetHighScores())
+    val hmGame = HangmanGame()
+    hmGame.playHangmanSentScoreToServer()
 }
 
-class GameLogic(wordToGuess: String, tries: Int) {
+class GameLogic(private var wordToGuess: String, tries: Int) {
 
     private var guessedLetters: MutableList<Char> = mutableListOf()
-    private var wordToGuess: String = wordToGuess
     private var triesLeft: Int = tries
 
 
@@ -78,7 +92,7 @@ class GameLogic(wordToGuess: String, tries: Int) {
 
 class WordHelpers {
     private val germanWords: List<String> =
-        File("./wordlist-german.txt").bufferedReader().readLines().filter { word -> word.length < 5 }
+        File("./myWordListGerman.txt").bufferedReader().readLines().filter { word -> word.length < 5 }
 
     fun isLetter(s: String): Boolean {
         return (s.length == 1) && s[0].isLetter()
@@ -97,7 +111,7 @@ class WordHelpers {
 }
 
 
-class TUI() {
+class TUI {
 
 
     private val wordHelpers = WordHelpers()
@@ -138,11 +152,13 @@ class TUI() {
 
 }
 
-class HangmanGame() {
+class HangmanGame {
     private val tui = TUI()
     //private val gameLogic = GameLogic("Hallo", 3)
+    private val httpSenderReceiver  :HTTPSenderReceiver = HTTPSenderReceiver()
 
-    fun playHangmanTUI(wordToGuess: String): Boolean {
+
+    private fun playHangmanTUI(wordToGuess: String): Boolean {
         val gameLogic = GameLogic(wordToGuess, 7)
         //var gameOnGoing = true
         var gameWon = false
@@ -168,14 +184,14 @@ class HangmanGame() {
         return playHangmanTUI(wordToGuess)
     }
 
-    fun playHangmanTUIOnePlayer(): Boolean {
+    private fun playHangmanTUIOnePlayer(): Boolean {
         val wordToGuess: String = tui.randomGermanWord()
         //println("\n".repeat(100))
         return playHangmanTUI(wordToGuess)
     }
 
 
-    fun playHangmanHighScore(): Int {
+    private fun playHangmanHighScore(): Int {
         var noGameLost = true
         var score = 0
         while (noGameLost) {
@@ -190,15 +206,53 @@ class HangmanGame() {
         return score
     }
 
-    fun playHangmanSentScoreToServer(){
+    suspend fun playHangmanSentScoreToServer() {
         val score = playHangmanHighScore()
         println("Gib deinen Namen ein")
         val playerName = readln()
-        println("Send name = " + playerName + " score =" + score + " to server")
-        val client = HttpClient(CIO)
 
+        httpSenderReceiver.sentNameScoreToServer(playerName, score)
 
+        println("Send name = $playerName score =$score to server")
+        print(httpSenderReceiver.getHighScores())
+
+    }
+    }
+
+class HTTPSenderReceiver  {
+    private val client = HttpClient(CIO)  {
+        install(ContentNegotiation){json()}
+    }
+
+    suspend fun getHighScores(): String {
+        val response: HttpResponse = client.get("http://0.0.0.0:8080/allPlayers") {
+            contentType(ContentType.Application.Json)}
+        val players = response.body<List<Player>>()
+        println(response.status.isSuccess().toString())
+        println(response.bodyAsText())
+        //println("HighScore")
+        //return "HighScore" + players.foldRight("") {player,acc ->  "\n" + (player.pretty()) + acc   }
+        return players.fold("HighScore") {acc,player ->  acc + "\n" + (player.pretty())    }
+    }
+
+    suspend fun sentNameScoreToServer(playerName:String, score: Int): String {
+
+        val response: HttpResponse = client.post("http://0.0.0.0:8080/players") {
+            contentType(ContentType.Application.Json)
+            setBody(Player(playerName, score))
+
+        }
+        return (response.status.isSuccess().toString())
     }
 
 
 }
+
+@Serializable
+data class Player(val name: String, val score: Int){
+    fun pretty(): String {
+        return name + " ".repeat(30 - name.length ) + score
+    }
+}
+
+

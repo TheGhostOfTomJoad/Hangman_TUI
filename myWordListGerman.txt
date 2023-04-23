@@ -1,0 +1,14 @@
+Informatik
+Java
+Kotlin
+SQL
+Compiler
+Datentyp
+Objekt
+Klasse
+Funktion
+Methode
+Quellcode
+Integer
+String
+Array
