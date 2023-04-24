@@ -13,26 +13,26 @@ class HTTPSenderReceiver  {
         install(ContentNegotiation) { json() }
     }
 
-    suspend fun getHighScores(): String {
+    suspend fun getHighScores(): List<Player> {
         val response: HttpResponse = client.get("http://0.0.0.0:8080/allPlayers") {
-            contentType(ContentType.Application.Json)}
+            contentType(ContentType.Application.Json)
+        }
         println(response.status.isSuccess().toString())
         println(response.bodyAsText())
-        val players = response.body<List<Player>>()
 
         //println("HighScore")
         //return "HighScore" + players.foldRight("") {player,acc ->  "\n" + (player.pretty()) + acc   }
-        return players.fold("HighScore") {acc,player ->  acc + "\n" + (player.pretty())    }
+        return response.body<List<Player>>() // .fold("HighScore") {acc,player ->  acc + "\n" + (player.pretty())    }
     }
 
-    suspend fun sentNameScoreToServer(playerName:String, score: Int): String {
+    suspend fun sentNameScoreToServer(player: Player): Boolean {
 
         val response: HttpResponse = client.post("http://0.0.0.0:8080/players") {
             contentType(ContentType.Application.Json)
-            setBody(Player(playerName, score))
+            setBody(player)
 
         }
-        return (response.status.isSuccess().toString())
+        return (response.status.isSuccess())
     }
 
 

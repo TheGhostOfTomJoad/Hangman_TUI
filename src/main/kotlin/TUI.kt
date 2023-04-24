@@ -53,5 +53,9 @@ class TUI {
         println("Du hast " + score + " Punkte erreicht!")
     }
 
+    fun printHighScores(players:List<Player>){
+        println(players.fold("HighScore") {acc,player ->  acc + "\n" + (player.pretty())})
+    }
+
 
 }

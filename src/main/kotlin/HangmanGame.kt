@@ -55,8 +55,9 @@ class HangmanGame {
         val score = playHangmanHighScore()
         println("Gib deinen Namen ein")
         val playerName = readln()
-        httpSenderReceiver.sentNameScoreToServer(playerName, score)
+        httpSenderReceiver.sentNameScoreToServer(Player(playerName, score))
         println("Send name = $playerName score =$score to server")
-        print(httpSenderReceiver.getHighScores())
+        tui.printHighScores(httpSenderReceiver.getHighScores())
+
     }
 }
