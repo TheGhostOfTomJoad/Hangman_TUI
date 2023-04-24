@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.8.0"
+    kotlin("jvm") version "1.8.10"
     application
     kotlin("plugin.serialization") version "1.4.21"
 }
@@ -22,6 +22,7 @@ dependencies {
     //implementation("ch.qos.logback:logback-classic:1.2.11")
     implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
     implementation ("org.slf4j:slf4j-log4j12:1.6.2")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks.test {

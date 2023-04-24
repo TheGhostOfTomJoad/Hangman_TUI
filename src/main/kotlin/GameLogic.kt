@@ -1,4 +1,4 @@
-class GameLogic(private var wordToGuess: String, tries: Int) {
+class GameLogic(private val wordToGuess: String, tries: Int) {
 
     private var guessedLetters: MutableList<Char> = mutableListOf()
     private var triesLeft: Int = tries
@@ -12,6 +12,7 @@ class GameLogic(private var wordToGuess: String, tries: Int) {
                 '_'
             }
         }).toCharArray())
+
     }
 
     private fun gameIsWon(): Boolean {

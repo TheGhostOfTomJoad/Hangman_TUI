@@ -14,28 +14,28 @@ class TUI {
             if (wordHelpers.isLetter(maybeLetter)) {
                 return maybeLetter[0]
             }
-            println(maybeLetter + "ist kein Buchstabe")
+            println(maybeLetter + " ist kein Buchstabe")
         }
 
     }
 
 
-    fun askForWord(): String {
-        while (true) {
-            println("Welches Wort soll erraten werden!")
-            val maybeWord: String = readln()
-            /*            if (maybeWord.all { c -> c.isLetter() }  ) {
-                            return maybeWord
-                        }*/
-            if (wordHelpers.isGermanWord(maybeWord)) {
-                return maybeWord
-            }
-            //println("Das Wort darf nur Buchstaben enthalten!")
-            println("Das ist kein deutsches Wort!")
-        }
-
-
-    }
+//    fun askForWord(): String {
+//        while (true) {
+//            println("Welches Wort soll erraten werden!")
+//            val maybeWord: String = readln()
+//            /*            if (maybeWord.all { c -> c.isLetter() }  ) {
+//                            return maybeWord
+//                        }*/
+//            if (wordHelpers.isGermanWord(maybeWord)) {
+//                return maybeWord
+//            }
+//            //println("Das Wort darf nur Buchstaben enthalten!")
+//            println("Das ist kein deutsches Wort!")
+//        }
+//
+//
+//    }
 
     fun printOnlyGuessedLettersInWord(onlyGuessedLettersInWord: String) {
         println("Das Wort ist: " + onlyGuessedLettersInWord)
@@ -45,10 +45,13 @@ class TUI {
         println("Das Wort war: " + word)
     }
 
-    fun printEmptyLines(n:Int){
-        println("\n".repeat(n))
-    }
+//    fun printEmptyLines(numberOfLines:Int){
+//        println("\n".repeat(numberOfLines))
+//    }
 
+    fun printScore (score:Int){
+        println("Du hast " + score + " Punkte erreicht!")
+    }
 
 
 }

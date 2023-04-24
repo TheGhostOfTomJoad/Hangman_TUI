@@ -8,11 +8,11 @@ class WordHelpers {
         return (s.length == 1) && s[0].isLetter()
     }
 
-    fun isGermanWord(word: String): Boolean {
-
-        return germanWords.contains(word)
-
-    }
+//    fun isGermanWord(word: String): Boolean {
+//
+//        return germanWords.contains(word)
+//
+//    }
 
     fun randomGermanWord(): String {
         return germanWords.random()
